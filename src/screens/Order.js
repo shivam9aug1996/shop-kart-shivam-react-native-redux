@@ -9,17 +9,32 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useEffect} from 'react';
+import Notify from '../components/Notify';
+import {clearSuccessOrderStatus} from '../redux/actions';
 
 const Order = () => {
-  //const [notify, setNotify] = useState(false);
+  const [notify, setNotify] = useState(false);
+  const dispatch = useDispatch();
   let orderHistory = useSelector(state => state.taskReducer.orderHistory);
-  orderHistory = orderHistory.reverse();
+
   let isSuccessfulOrder = useSelector(
     state => state.taskReducer.successfulOrder,
   );
+  useEffect(() => {
+    if (isSuccessfulOrder) {
+      setNotify(true);
+      setTimeout(() => {
+        setNotify(false);
+      }, 3000);
+      dispatch(clearSuccessOrderStatus());
+    }
+    // return () => {
+    //   setNotify(false);
+    // };
+  });
   const renderItem = ({item}) => {
-    console.log(item);
     return (
       <View style={{padding: 10}}>
         <View
@@ -77,9 +92,9 @@ const Order = () => {
 
                 <Text style={{fontSize: 15, fontWeight: '700'}}>{`${
                   product.price
-                } * ${product.quantity} = ${
+                } * ${product.quantity} = ${(
                   product.price * product.quantity
-                }`}</Text>
+                ).toFixed(2)}`}</Text>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -96,11 +111,14 @@ const Order = () => {
   return (
     <View>
       {orderHistory.length !== 0 ? (
-        <FlatList
-          data={orderHistory}
-          renderItem={renderItem}
-          keyExtractor={item => item.orderId}
-        />
+        <>
+          {notify && <Notify message="Order placed Successfully" />}
+          <FlatList
+            data={orderHistory}
+            renderItem={renderItem}
+            keyExtractor={item => item.orderId}
+          />
+        </>
       ) : (
         <View
           style={{

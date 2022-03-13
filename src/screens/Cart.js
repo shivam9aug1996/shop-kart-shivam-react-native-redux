@@ -14,7 +14,7 @@ import AddRemoveCartCounter from '../components/AddRemoveCartCounter';
 import {placeOrder} from '../redux/actions';
 const Cart = ({navigation}) => {
   let cartData = useSelector(state => state.taskReducer.cartData);
-  cartData = cartData.reverse();
+
   const dispatch = useDispatch();
   const totalMoney =
     cartData !== undefined &&
@@ -52,7 +52,7 @@ const Cart = ({navigation}) => {
           {/* <Text style={{fontWeight: '700'}}>{`Rs. ${item.price}`}</Text> */}
           <Text style={{fontSize: 15, fontWeight: '700'}}>{`${item.price} * ${
             item.quantity
-          } = ${item.price * item.quantity}`}</Text>
+          } = ${(item.price * item.quantity).toFixed(2)}`}</Text>
           <View
             style={{
               flexDirection: 'row',

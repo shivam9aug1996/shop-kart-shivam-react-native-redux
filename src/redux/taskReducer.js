@@ -22,7 +22,7 @@ const taskReducer = (state = initialState, action) => {
           }
         });
         if (bolVal) {
-          arr1 = [...state.cartData, {...obj, quantity: 1}];
+          arr1 = [{...obj, quantity: 1}, ...state.cartData];
         } else {
           let f = data.map(item => {
             return item.id === parseInt(action.payload.id)
@@ -53,7 +53,7 @@ const taskReducer = (state = initialState, action) => {
           }
         });
         if (bolVal) {
-          arr2 = [...state.cartData, {...obj, quantity: 1}];
+          arr2 = [{...obj, quantity: 1}, ...state.cartData];
         } else {
           let f = data.map(item => {
             return item.id === parseInt(action.payload.id)
@@ -99,7 +99,7 @@ const taskReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        orderHistory: [...state.orderHistory, obj1],
+        orderHistory: [obj1, ...state.orderHistory],
         cartData: [],
         successfulOrder: true,
       };
